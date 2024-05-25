@@ -44,7 +44,7 @@ const UpdateProducts = () => {
       .catch(error => console.error('Error updating product:', error));
   };  
 
-    
+    //ok
 
 
   return (
