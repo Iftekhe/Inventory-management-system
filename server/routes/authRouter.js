@@ -43,8 +43,14 @@ Router.get('/', authController.index )
 // Register route - POST
 Router.post("/register", upload.single('profileImage'), authController.registerUser);
 
+// All user by id route - GET
+Router.get("/AllUser/:id", isAdmin, authController.userById);
+
+// All user - GET
+Router.get("/AllUser", authController.AllUser);
+
 // update userinfo route - POST
-Router.put("/registerUpdateUser/:id", upload.single('profileImage'), passport.authenticate('jwt', { session: false }), isAdmin, authController.registerUpdateUser);
+Router.put("/registerUpdateUser/:id", upload.single('profileImage'), isAdmin, authController.registerUpdateUser);
 
 // Delete user route - DELETE (highly restricted)
 Router.delete("/deleteUsers/:id", passport.authenticate('jwt', { session: false }), isAdmin, authController.deleteUser);

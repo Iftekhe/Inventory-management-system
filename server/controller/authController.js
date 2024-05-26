@@ -85,6 +85,36 @@ exports.registerUser = async (req, res) => {
 };
 
 
+//get user by id
+
+exports.userById =  (req, res) => {
+  try {
+    const id = req.params.id
+     User.findById({_id:id})
+    .then(users => res.json(users))
+    .catch(err => res.json(err))
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving');
+  }
+};
+
+//All user 
+
+exports.AllUser = async (req, res) => {
+  try {
+    const users = await User.find()
+     res.json(users) 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving');
+  }
+};
+
+
+
+
 //update register user controller -- put
 
 exports.registerUpdateUser = async (req, res) => {

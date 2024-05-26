@@ -51,3 +51,16 @@ exports.getUserWithLocation = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+
+//get all location
+exports.AllbranchLocation = async (req, res) => {
+  try {
+    const Locations = await Location.find()
+
+    res.json(Locations); // Send the user object with populated location details
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+};

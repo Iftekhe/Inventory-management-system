@@ -10,7 +10,7 @@ const isAdmin = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY); // Use your JWT secret key from the environment variable
     if (decoded.role !== 'admin') {
-      return res.status(403).send({ success: false, msg: 'Access denied: Admins only' });
+      return res.status(402).send({ success: false, msg: 'Access denied: Admins only' });
     }
     req.user = decoded; // Attach the decoded token to the request object
     next();
