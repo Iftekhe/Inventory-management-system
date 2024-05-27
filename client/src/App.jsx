@@ -6,20 +6,27 @@ import LoginPage from './pages/LoginPage';
 import AddProductPage from './pages/AddProductPage';
 import ProductsPagee from './pages/ProductsPage';
 import RegisterUpdateUserPage from './pages/RegisterUpdateUserPage';
-import UsersList from './pages/UserListPage';
-import EditUser from './pages/EditUserPage';
+import UsersListPage from './pages/UserListPage';
+import EditUserPage from './pages/EditUserPage';
+import Menu from '../src/components/Menu';
+import EditProductPage from './pages/EditProductPage';
+import InventoryPage from './pages/InventoryPage'
+
 
 function App() {
     return (
         <Router>
+            <Menu />
             <Routes>
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/add-product" element={<AddProductPage />} />
                 <Route path="/products" element={<ProductsPagee />} />
                 <Route path="/register-Update-User" element={<RegisterUpdateUserPage />} />
-                <Route path="/user-list" element={<UsersList/>}/>
-                <Route path="/editUser/:id" element={<EditUser/>}/>
+                <Route path="/user-list" element={<UsersListPage/>}/>
+                <Route path="/editUser/:id" element={<EditUserPage/>}/>
+                <Route path="/editProduct/:id" element={<EditProductPage/>}/>
+                <Route path="/Inventory" element={<InventoryPage/>}/>
 
             </Routes>
         </Router>
