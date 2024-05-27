@@ -1,12 +1,12 @@
 const express = require("express");
 const InventoryRouter = express.Router();
 const inventoryController = require("../controller/inventoryController");
-const passport = require('passport');
-require('../config/passport');
+// const passport = require('passport');
+// require('../config/passport');
 //const jwt = require('jsonwebtoken');
 
-const app = express();
-app.use(passport.initialize());
+// const app = express();
+// app.use(passport.initialize());
 
 const isAdmin = require('../middleware/isAdmin');
 

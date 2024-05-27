@@ -32,24 +32,32 @@ exports.addInventory = async (req, res) => {
 
 //get All Inventory -- GET
 
+// exports.getAllInventory = async (req, res) => {
+//     try {
+//         // Fetch all inventory items
+//         const inventoryItems = await Inventory.find()
+//             // .populate('productId')
+//             // .populate('locationId');
+
+//         // Return the fetched inventory items
+//         res.json(inventoryItems);
+//     } catch (error) {
+//         // Handle errors
+//         console.error("Error fetching inventory:", error);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// };
+
+
+// Get all products with associated category
 exports.getAllInventory = async (req, res) => {
-        try {
-          // Parsing query parameters for filtering
-          const { productId, locationId } = req.query;
-    
-          // Building filter criteria
-          let filter = {};
-          if (productId) filter.productId = productId;
-          if (locationId) filter.locationId = locationId;
-    
-          // Fetching filtered inventory
-          const inventory = await Inventory.find(filter)
-            .populate('productId')
-            .populate('locationId');
-    
-          // Sending response with inventory data
-          res.json(inventory);
-        } catch (error) {
-          res.status(500).send(error.message);
-        }
-      }
+  try {
+    const inventoryItems = await Inventory.find()
+      .populate('productId')
+      .populate('locationId');
+    res.json(inventoryItems);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving products with category');
+  }
+};
