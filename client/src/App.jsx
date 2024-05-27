@@ -1,34 +1,72 @@
-// import './App.css'
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import Login from './components/Auth/Login'
-import Registration from './components/Auth/Registration'
-import Admin from './components/Admin/admin'
-import Employee from './components/employee/Employee'
-import Allproducts from './components/products/AllProducts'
-import AddProducts from './components/products/AddProducts'
-import UpdateProduct from './components/products/UpdateProducts'
-import AllUsers from './components/users/AllUsers'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import AddProductPage from './pages/AddProductPage';
+import ProductsPagee from './pages/ProductsPage';
+import RegisterUpdateUserPage from './pages/RegisterUpdateUserPage';
+import UsersList from './pages/UserListPage';
+import EditUser from './pages/EditUserPage';
 
 function App() {
-  return (
-    <>
-    <BrowserRouter>
-    <Routes>
-      <Route path='/' element={<Login />} >  </Route>
-      <Route path='registration' element={<Registration />} >  </Route>
-      <Route path='/admin/:username/dashboard' element={<Admin />} >  </Route>
-      <Route path='/admin/:username/allUsers' element={<AllUsers />} >  </Route>
-      <Route path='/employee/:username/dashboard' element={<Employee />} >  </Route>
-      <Route path='/admin/allproducts' element={<Allproducts/>}></Route> 
-      <Route path='/admin/AddProducts' element={<AddProducts/>}></Route> 
-      <Route path='/admin/Products/:id' element={<UpdateProduct/>}></Route>
-    </Routes>
-    </BrowserRouter>
-    
-    </>
-  )
+    return (
+        <Router>
+            <Routes>
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/add-product" element={<AddProductPage />} />
+                <Route path="/products" element={<ProductsPagee />} />
+                <Route path="/register-Update-User" element={<RegisterUpdateUserPage />} />
+                <Route path="/user-list" element={<UsersList/>}/>
+                <Route path="/editUser/:id" element={<EditUser/>}/>
+
+            </Routes>
+        </Router>
+    );
 }
 
-export default App
+export default App;
+
+
+
+
+
+
+
+
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+// import './App.css'
+
+// function App() {
+//   const [count, setCount] = useState(0)
+
+//   return (
+//     <>
+//       <div>
+//         <a href="https://vitejs.dev" target="_blank">
+//           <img src={viteLogo} className="logo" alt="Vite logo" />
+//         </a>
+//         <a href="https://react.dev" target="_blank">
+//           <img src={reactLogo} className="logo react" alt="React logo" />
+//         </a>
+//       </div>
+//       <h1>Vite + React</h1>
+//       <div className="card">
+//         <button onClick={() => setCount((count) => count + 1)}>
+//           count is {count}
+//         </button>
+//         <p>
+//           Edit <code>src/App.jsx</code> and save to test HMR
+//         </p>
+//       </div>
+//       <p className="read-the-docs">
+//         Click on the Vite and React logos to learn more
+//       </p>
+//     </>
+//   )
+// }
+
+// export default App
