@@ -1,43 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import api from '../api/api';
-
-const Products = () => {
+import { Link,useNavigate  } from 'react-router-dom';
+import api from '../../api/api';
+import AdminMenu from '../Menu/AdminMenu';
+const BranchProducts = () => {
     const [products, setProducts] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await api.get('/api/product/AllProducts');
+                const response = await api.get('/api/product/AllApprovedProducts');
                 console.log("Api response: ", response.data);
-                setProducts(response.data); // Set products state with response.data directly
-                setErrorMessage(''); // Clear error message if fetching succeeds
+                setProducts(response.data);
+                setErrorMessage('');
             } catch (error) {
                 console.error('Error fetching products:', error);
                 console.error(error.response?.data?.msg);
-                setProducts([]); // Ensure products state is an empty array if fetching fails
-                setErrorMessage(error.response?.data?.msg || 'Error logging in');
+                setProducts([]);
+                const errorMessage = error.response?.data?.msg || 'Error logging in';
+                if (errorMessage === 'Access denied: Admins only') {
+                    // Redirect to the unauthorized page
+                    navigate('/unauthorized');
+                } else {
+                    setErrorMessage(errorMessage);
+                }
             }
         };
 
         fetchProducts();
-    }, []);
+    }, [navigate]);
+    
 
     return (
         <div>
-            <h2>Products</h2>
-            {products.length > 0 ? ( // Check if products is not empty before mapping
-                <table>
-                    <thead>
+            <AdminMenu />
+        
+        <div className="container mt-5">
+            <h2 className="mb-4">Products</h2>
+            {products.length > 0 ? (
+                <table className="table table-striped table-bordered">
+                    <thead className="thead-dark">
                         <tr>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Brand</th>
                             <th>Model</th>
                             <th>Description</th>
+                            <th>Quantity</th>
                             <th>Action</th>
-                            {/* <th>Created At</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -48,20 +59,21 @@ const Products = () => {
                                 <td>{product.brand}</td>
                                 <td>{product.model}</td>
                                 <td>{product.description}</td>
+                                <td>{product.quantity}</td>
                                 <td>
-                                    <Link to={`/editProduct/${product._id}`}>Edit</Link> {/* Add Edit link */}
+                                    <Link to={`/editProduct/${product._id}`} className="btn btn-primary btn-sm">Edit</Link>
                                 </td>
-                                {/* <td>{new Date(product.createdAt).toLocaleString()}</td> */}
                             </tr>
                         ))}
                     </tbody>
                 </table>
             ) : (
-                <p>No products available</p>
+                <p className="alert alert-info">No products available</p>
             )}
-            {errorMessage && <p>{errorMessage}</p>}
+            {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
+        </div>
         </div>
     );
 };
 
-export default Products;
+export default BranchProducts;

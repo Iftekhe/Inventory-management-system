@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import api from '../api/api';
+import api from '../../api/api';
 
 const UpdateUser = () => {
     const { id } = useParams(); // Use useParams to get the userId from the URL

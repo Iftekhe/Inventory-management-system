@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import api from '../api/api';
+import api from '../../api/api';
 
 const EditProduct = () => {
     const { id } = useParams();
@@ -10,6 +10,7 @@ const EditProduct = () => {
         brand: '',
         model: '',
         description: '',
+        quantity: '',
         // other fields...
     });
     const [message, setMessage] = useState('');
@@ -69,6 +70,7 @@ const EditProduct = () => {
                 <input type="text" name="brand" value={formData.brand} onChange={handleChange} placeholder="Brand" required />
                 <input type="text" name="model" value={formData.model} onChange={handleChange} placeholder="Model" required />
                 <input type="text" name="description" value={formData.description} onChange={handleChange} placeholder="Description" required />
+                <input type="number" name="quantity" value={formData.quantity} onChange={handleChange} placeholder="quantity" required />
                 <button type="submit">Update Product</button>
                 <button type="button" onClick={handleDelete}>Delete User</button>
             </form>
