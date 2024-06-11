@@ -23,7 +23,7 @@ const transferRouter = require('./routes/transferRouter')
 const database = require("./config/database")
 const passport = require('./config/passport');
 app.use(passport.initialize());
-//app.set("view engine", "ejs");
+app.set("view engine", "ejs");
 app.use(cors(
     {
         origin: '*'

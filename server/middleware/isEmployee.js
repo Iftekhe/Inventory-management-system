@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model'); // Adjust the path as needed
 
-// Middleware to check if the user is an admin
-const isAdmin = async (req, res, next) => {
+// Middleware to check if the user is an admin or employee
+const isEmployee = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
     return res.status(401).send({ success: false, msg: 'No token provided' });
@@ -10,14 +9,9 @@ const isAdmin = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY); // Use your JWT secret key from the environment variable
-
-    // Find the user by ID in the database
-    const user = await User.findById(decoded.id);
-
-    if (!user || user.department !== 'Administration') {
-      return res.status(402).send({ success: false, msg: 'Access denied: Admins only' });
+    if (decoded.department == 'Administration') {
+      return res.status(403).send({ success: false, msg: 'Access denied: employees only' });
     }
-
     req.user = decoded; // Attach the decoded token to the request object
     next();
   } catch (error) {
@@ -25,4 +19,5 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = isAdmin;
+module.exports = isEmployee;
+

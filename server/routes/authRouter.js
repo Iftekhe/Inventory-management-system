@@ -11,6 +11,7 @@ app.use(passport.initialize());
 const multer = require("multer");
 const path = require('path');
 const isAdmin = require('../middleware/isAdmin');
+const isBranchAdmin = require('../middleware/isBranchAdmin')
 
 //define storage
 const storage = multer.diskStorage({
@@ -23,7 +24,7 @@ const storage = multer.diskStorage({
   
     },
     filename:function(req,file,cb){
-      const name = file.originalname;
+      const name = Date.now()+'-'+file.originalname;
       cb(null,name,function(error,success){
         if(error){
           console.log(error)
@@ -49,19 +50,24 @@ Router.get("/AllUser/:id", isAdmin, authController.userById);
 // All user - GET
 Router.get("/AllUser", authController.AllUser);
 
-// update userinfo route - POST
+Router.get("/count", authController.getUserCount );
+
+Router.get("/pendingCount", authController.pendingCount );
+
+//Router.get('/countProd', productController.getProductCount);
+
+// update userinfo route - put
 Router.put("/registerUpdateUser/:id", upload.single('profileImage'), isAdmin, authController.registerUpdateUser);
 
 // Delete user route - DELETE (highly restricted)
-Router.delete("/deleteUsers/:id", passport.authenticate('jwt', { session: false }), isAdmin, authController.deleteUser);
+Router.delete("/deleteUsers/:id", isAdmin, authController.deleteUser);
 
 
 // Login route - POST
 Router.post("/login", authController.loginUser);
 
-// Logout route
-Router.get('/logout' , authController.logout);
 
+Router.get('/pending/:branchId', isBranchAdmin, authController.getPendingUsersByBranch);
 
 
 
