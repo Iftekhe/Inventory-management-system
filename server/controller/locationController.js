@@ -64,3 +64,38 @@ exports.AllbranchLocation = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+
+exports.countLocation = async (req, res) => {
+  try {
+    const LocationCount = await Location.countDocuments();
+    res.json({ count: LocationCount });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.getAllUserOfLocation = async (req, res) => {
+  try {
+    const locationId = req.params.locationId;
+
+    // Validate the locationId
+    // if (!mongoose.Types.ObjectId.isValid(locationId)) {
+    //   return res.status(400).send({ error: 'Invalid location ID' });
+    // }
+
+    // Find the location to ensure it exists
+    const location = await Location.findById(locationId);
+    if (!location) {
+      return res.status(404).send({ error: 'Location not found' });
+    }
+
+    // Find all users associated with this location
+    const users = await User.find({ branchId: locationId }).select('-password -tokens');
+
+    res.json(users)
+  } catch (error) {
+    res.status(500).send({ error: 'An error occurred while fetching users' });
+  }
+};

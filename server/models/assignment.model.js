@@ -26,8 +26,13 @@ const assignmentSchema = mongoose.Schema({
   },
   currentStatus: {
     type: String,
-    enum: ["assigned", "returned", "in_transfer"],
+    enum: ["assigned", "returned", "in_transfer", "pending"],
     required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
   },
 });
 

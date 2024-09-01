@@ -7,9 +7,35 @@ const assignmentController = require("../controller/assignmentController");
 
 const isAdmin = require('../middleware/isAdmin');
 
-assignmnetRouter.post("/addAssignment", isAdmin, assignmentController.addAssignment);
+const verifyToken = require('../middleware/verifyToken');
 
-assignmnetRouter.get("/getAllAssignment", isAdmin, assignmentController.getAssignments);
+
+assignmnetRouter.post("/addAssignment",  assignmentController.addAssignment);
+
+assignmnetRouter.post("/requestAssignment",  assignmentController.requestAssignment);
+
+assignmnetRouter.get("/getAllAssignment",  assignmentController.getAssignments);
+
+assignmnetRouter.get("/assignments/:userId", assignmentController.getUserAssignments);
+
+assignmnetRouter.put("/assignments/return/:assignmentId", assignmentController.returnAssignment);
+
+
+assignmnetRouter.get("/returnedAssignments",  assignmentController.getReturnedAssignments);
+
+
+
+assignmnetRouter.get("/admin/productRequests", assignmentController.getProductRequests);
+
+
+assignmnetRouter.post("/employee/requestProduct",   assignmentController.requestProduct);
+
+
+assignmnetRouter.put("/admin/approveRequest/:assignmentId",  assignmentController.approveRequest);
+
+
+assignmnetRouter.post("/admin/rejectRequest/:requestId",  assignmentController.rejectRequest);
+
 
 
 module.exports = assignmnetRouter;

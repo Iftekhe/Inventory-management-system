@@ -12,9 +12,9 @@ const userSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  role: {
+  designation: {
     type: String,
-    enum: ["admin", "branch_admin", "employee"],
+    trim: true,
     required: true,
   },
   isApproved: {
@@ -24,6 +24,8 @@ const userSchema = mongoose.Schema({
   department: {
     type: String,
     trim: true,
+    enum: ['Administration', 'HR', 'Finance', 'Technology', 'Marketing', 'Sales', 'Support'], // Predefined departments
+    required: true,
   },
   fullName: {
     type: String,
@@ -43,24 +45,24 @@ const userSchema = mongoose.Schema({
     trim: true,
   },
   address: {
-    type: String, // Store image data as Base64 string
-    required: true
-    // type: {
-    //   city: { type: String, trim: true },
-    //   zipCode: { type: String, trim: true },
-    // },
-    // required: false, // Ensure address information is provided
+    type: String,
+    required: true,
   },
   branchId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Location", // Reference to Locations collection
-    required: function () { return this.role !== "admin"; }, // Optional for admins
+    required: function () { return this.designation !== "admin"; }, // Optional for admins
   },
   profileImage: {
     type: String, // Store image data as Base64 string
     required: true
   },
-
+  gender: {
+    type: String,
+    trim: true,
+    enum: ['Male', 'Female'],
+    required: true,
+  },
   tokens: [
     {
       token: {
