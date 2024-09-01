@@ -156,7 +156,7 @@ const AdminHeadOfficeComponent = () => {
                   Inventory Management
                 </div>
                 <div className="card-body">
-                  <Link to="/inventory" className="btn btn-primary">View Inventory</Link>
+                  <Link to="/All-inventory" className="btn btn-primary">View Inventory</Link>
                 </div>
               </div>
             </div>
