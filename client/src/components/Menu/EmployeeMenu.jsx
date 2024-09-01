@@ -48,7 +48,7 @@ const EmployeeMenu = () => {
               </ul>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/inventory">Inventory</Link>
+              <Link className="nav-link" to="/branch-inventory">Inventory</Link>
             </li>
            
           </ul>
@@ -58,7 +58,8 @@ const EmployeeMenu = () => {
               {user.username}
               </a>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
-                <li><Link className="dropdown-item" to="/user-list">User List</Link></li>
+              <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
+                <li><Link className="dropdown-item" to="/user-assignments">My Assignments</Link></li>
                 <li><Logout /></li>
               </ul>
             </li>

@@ -170,11 +170,12 @@ const PendingInventoryComponent = () => {
                                 <p>model: {inventory.productId?.model || 'Unknown'}</p>
                                 <p>quantity: {inventory.productId?.quantity || 'Unknown'}</p>
                                 <p>productCode: {inventory.productId?.productCode || 'Unknown'}</p>
-                                {inventory.productId.addedBy && (
-                                <p>Requested by: {inventory.productId.addedBy.username}, 
-                                {inventory.productId.addedBy.branch},
-                                {inventory.productId.addedBy.department}</p>
-                            )}
+                                {/* {invent
+                                ory.productId.addedBy && (
+                                <p>Requested by: {inventory.addedBy.username}, 
+                                {inventory.addedBy.branch},
+                                {inventory.addedBy.department}</p>
+                            )} */}
                                 <button className="btn btn-success mr-2" onClick={() => handleApprove(inventory._id)}>Approve</button>
                                 <button className="btn btn-danger" onClick={() => handleReject(inventory._id)}>Reject</button>
                             </li>

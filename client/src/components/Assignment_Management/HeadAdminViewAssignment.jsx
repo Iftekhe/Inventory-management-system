@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from '../../api/api';
-import AdminMenu from "../Menu/AdminMenu";
+import HeadAdminMenu from "../Menu/HeadAdminMenu";
 
-const ViewAssignments = () => {
+const HeadAdminViewAssignment = () => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ const ViewAssignments = () => {
 
   return (
     <div>
-      <AdminMenu />
+      <HeadAdminMenu />
       <div className="container mt-5">
         <h2>Assignment Records</h2>
         {assignments.length > 0 ? (
@@ -66,4 +66,4 @@ const ViewAssignments = () => {
   );
 };
 
-export default ViewAssignments;
+export default HeadAdminViewAssignment;
