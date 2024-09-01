@@ -45,7 +45,7 @@ Router.get('/', authController.index )
 Router.post("/register", upload.single('profileImage'), authController.registerUser);
 
 // All user by id route - GET
-Router.get("/AllUser/:id", isAdmin, authController.userById);
+Router.get("/AllUser/:id",  authController.userById);
 
 // All user - GET
 Router.get("/AllUser", authController.AllUser);
@@ -57,7 +57,7 @@ Router.get("/pendingCount", authController.pendingCount );
 //Router.get('/countProd', productController.getProductCount);
 
 // update userinfo route - put
-Router.put("/registerUpdateUser/:id", upload.single('profileImage'), isAdmin, authController.registerUpdateUser);
+Router.put("/registerUpdateUser/:id", upload.single('profileImage'), authController.registerUpdateUser);
 
 // Delete user route - DELETE (highly restricted)
 Router.delete("/deleteUsers/:id", isAdmin, authController.deleteUser);

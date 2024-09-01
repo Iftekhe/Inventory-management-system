@@ -10,9 +10,20 @@ const isAdmin = require('../middleware/isAdmin');
 const verifyToken = require('../middleware/verifyToken');
 
 
-assignmnetRouter.post("/addAssignment", isAdmin, assignmentController.addAssignment);
+assignmnetRouter.post("/addAssignment",  assignmentController.addAssignment);
 
-assignmnetRouter.get("/getAllAssignment", isAdmin, assignmentController.getAssignments);
+assignmnetRouter.post("/requestAssignment",  assignmentController.requestAssignment);
+
+assignmnetRouter.get("/getAllAssignment",  assignmentController.getAssignments);
+
+assignmnetRouter.get("/assignments/:userId", assignmentController.getUserAssignments);
+
+assignmnetRouter.put("/assignments/return/:assignmentId", assignmentController.returnAssignment);
+
+
+assignmnetRouter.get("/returnedAssignments",  assignmentController.getReturnedAssignments);
+
+
 
 assignmnetRouter.get("/admin/productRequests", assignmentController.getProductRequests);
 
@@ -20,7 +31,7 @@ assignmnetRouter.get("/admin/productRequests", assignmentController.getProductRe
 assignmnetRouter.post("/employee/requestProduct",   assignmentController.requestProduct);
 
 
-assignmnetRouter.post("/admin/approveRequest/:requestId",  assignmentController.approveRequest);
+assignmnetRouter.put("/admin/approveRequest/:assignmentId",  assignmentController.approveRequest);
 
 
 assignmnetRouter.post("/admin/rejectRequest/:requestId",  assignmentController.rejectRequest);

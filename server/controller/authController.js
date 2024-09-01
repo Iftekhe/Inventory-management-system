@@ -158,15 +158,15 @@ exports.registerUpdateUser = async (req, res) => {
     }
 
     // Check for duplicate email
-    if (email && email !== user.email) {
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        if (uploadedFile) {
-          fs.unlinkSync(path.join(__dirname, '../uploads/profileImage', uploadedFile.filename));
-        }
-        return res.status(400).send({ success: false, msg: 'Email is already taken' });
-      }
-    }
+    // if (email && email !== user.email) {
+    //   const existingUser = await User.findOne({ email });
+    //   if (existingUser) {
+    //     if (uploadedFile) {
+    //       fs.unlinkSync(path.join(__dirname, '../uploads/profileImage', uploadedFile.filename));
+    //     }
+    //     return res.status(400).send({ success: false, msg: 'Email is already taken' });
+    //   }
+    // }
 
     // Create an update object
     const updateData = {

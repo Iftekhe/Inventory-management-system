@@ -84,6 +84,51 @@ exports.addAssignment = async (req, res) => {
 
 
 
+
+
+exports.requestAssignment = async (req, res) => {
+  try {
+    const { productId, assignedDate, returnedDate, branchId } = req.body;
+
+    // Get employeeId from token
+    const existingToken = req.headers.authorization;
+    const decodedToken = decodeToken(existingToken);
+    const employeeId = decodedToken.id; // Assuming userId is the correct field in your token
+
+    // Create a new assignment record with pending status
+    const newAssignment = new Assignment({
+      productId,
+      employeeId,
+      assignedDate,
+      returnedDate,
+      branchId,
+      currentStatus: "pending", // Set status to pending
+      quantity: 1, // Assuming quantity is always 1 for pending requests
+    });
+
+    // Save the new assignment record to the database
+    await newAssignment.save();
+
+    // Send a success response
+    res.status(201).send("Assignment record added successfully");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const decodeToken = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return {};
+  }
+};
+
+
+
+
+
 //get all assignmnet --GET
 exports.getAssignments = async (req, res) => {
   try {
@@ -101,6 +146,62 @@ exports.getAssignments = async (req, res) => {
   }
 };
 
+
+exports.getUserAssignments = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const assignments = await Assignment.find({ employeeId: userId })
+      .populate("productId")
+      .populate("branchId")
+      .populate("employeeId");
+    
+    res.json(assignments);
+  } catch (error) {
+    console.error("Error fetching user assignments:", error);
+    res.status(500).send("Error retrieving user assignments");
+  }
+};
+
+
+exports.returnAssignment = async (req, res) => {
+  try {
+    const assignmentId = req.params.assignmentId;
+
+    // Find the assignment by ID
+    const assignment = await Assignment.findById(assignmentId);
+    if (!assignment) {
+      return res.status(404).send("Assignment not found");
+    }
+
+    // Update the assignment's status to returned
+    assignment.currentStatus = "returned";
+    assignment.returnedDate = new Date();
+
+    // Save the updated assignment
+    await assignment.save();
+
+    // Send a success response
+    res.status(200).send("Assignment returned successfully");
+  } catch (error) {
+    console.error("Error returning assignment:", error);
+    res.status(500).send("Error returning assignment");
+  }
+};
+
+
+
+exports.getReturnedAssignments = async (req, res) => {
+  try {
+    const returnedAssignments = await Assignment.find({ currentStatus: "returned" })
+      .populate("productId")
+      .populate("branchId");
+
+    res.json(returnedAssignments);
+  } catch (error) {
+    console.error("Error fetching returned assignments:", error);
+    res.status(500).send("Error fetching returned assignments");
+  }
+};
 
 
 exports.requestProduct = async (req, res) => {
@@ -164,40 +265,85 @@ console.log(employeeId)
 // };
 
 
+// exports.approveRequest = async (req, res) => {
+//   try {
+//     const inventoryRequest = await Inventory.findById(req.params.requestId);
+//     if (!inventoryRequest) return res.status(404).send('Request not found');
+//     if (inventoryRequest.status !== 'pending') return res.status(400).send('Request is not pending approval');
+
+//     const product = await Product.findById(inventoryRequest.productId);
+//     if (!product) return res.status(404).send('Product not found');
+//     if (inventoryRequest.quantity > product.quantity) return res.status(400).send('Insufficient product quantity available');
+
+//     // Deduct quantity from the product inventory
+//     product.quantity -= inventoryRequest.quantity;
+//     await product.save();
+
+//     // Update inventory request status to approved
+//     inventoryRequest.status = 'approved';
+//     await inventoryRequest.save();
+
+//     // Create a new assignment record
+//     const assignment = new Assignment({
+//       productId: inventoryRequest.productId,
+//       employeeId: inventoryRequest.employeeId,
+//       branchId: inventoryRequest.locationId,
+//       quantity: inventoryRequest.quantity,
+//       currentStatus: 'assigned',
+//     });
+
+//     await assignment.save();
+
+//     res.json({ message: 'Request approved successfully.', assignment });
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   }
+// }
+
+
+
+
+// Controller to handle approval of returned assignments
 exports.approveRequest = async (req, res) => {
   try {
-    const inventoryRequest = await Inventory.findById(req.params.requestId);
-    if (!inventoryRequest) return res.status(404).send('Request not found');
-    if (inventoryRequest.status !== 'pending') return res.status(400).send('Request is not pending approval');
+    const { action } = req.body;
+    const assignmentId = req.params.assignmentId;
 
-    const product = await Product.findById(inventoryRequest.productId);
-    if (!product) return res.status(404).send('Product not found');
-    if (inventoryRequest.quantity > product.quantity) return res.status(400).send('Insufficient product quantity available');
+    // Find the assignment by ID
+    const assignment = await Assignment.findById(assignmentId);
+    if (!assignment) return res.status(404).send("Assignment not found");
 
-    // Deduct quantity from the product inventory
-    product.quantity -= inventoryRequest.quantity;
-    await product.save();
+    if (action === "approve") {
+      // Update the inventory
+      const inventoryRecord = await Inventory.findOne({ productId: assignment.productId, locationId: assignment.branchId });
+      if (inventoryRecord) {
+        inventoryRecord.quantity += assignment.quantity;
+        inventoryRecord.status = "approved";
+        await inventoryRecord.save();
+      } else {
+        const newInventoryRecord = new Inventory({
+          productId: assignment.productId,
+          locationId: assignment.branchId,
+          quantity: assignment.quantity,
+          status: "approved",
+        });
+        await newInventoryRecord.save();
+      }
 
-    // Update inventory request status to approved
-    inventoryRequest.status = 'approved';
-    await inventoryRequest.save();
+      // Remove the assignment from the assignments collection
+      await Assignment.findByIdAndDelete(assignmentId);
+    } else if (action === "reject") {
+      // Update the assignment's status to assigned again
+      assignment.currentStatus = "assigned";
+      await assignment.save();
+    }
 
-    // Create a new assignment record
-    const assignment = new Assignment({
-      productId: inventoryRequest.productId,
-      employeeId: inventoryRequest.employeeId,
-      branchId: inventoryRequest.locationId,
-      quantity: inventoryRequest.quantity,
-      currentStatus: 'assigned',
-    });
-
-    await assignment.save();
-
-    res.json({ message: 'Request approved successfully.', assignment });
+    res.status(200).json({ message: `Assignment ${action}d successfully` });
   } catch (error) {
-    res.status(500).send(error.message);
+    console.error(`Error ${action} assignment:`, error);
+    res.status(500).send(`Error ${action} assignment`);
   }
-}
+};
 
 
 

@@ -2,6 +2,7 @@ const product = require("../models/product.model");
 const Product = require("../models/product.model");
 //const upload = require('../middleware/uploadMiddleware');
 const inventory = require("../models/inventory.model")
+const jwt = require('jsonwebtoken');
 exports.addProductWithImage = async (req, res) => {
   const uploadedFile = req.file;
   try {
@@ -168,7 +169,7 @@ exports.getAllApprovedProducts = async (req, res) => {
 };
 
 
- const jwt = require('jsonwebtoken'); // Import jwt to decode token
+ //const jwt = require('jsonwebtoken'); // Import jwt to decode token
 
 // exports.getBrnanchAllApprovedProducts = async (req, res) => {
 //   try {
@@ -185,30 +186,78 @@ exports.getAllApprovedProducts = async (req, res) => {
 //     console.error(error);
 //     res.status(500).send('Error retrieving products with category');
 //   }
-// };
+// // };
+
+
+// exports.getBrnanchAllApprovedProducts = async (req, res) => {
+//   try {
+//     const token = req.headers.authorization.split(' ')[1];
+//     if (!token) {
+//       return res.status(401).send('Authorization token missing');
+//     }
+
+//     const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+//     if (!decodedToken || !decodedToken.branchId) {
+//       return res.status(401).send('Invalid token');
+//     }
+
+//     const userBranch = decodedToken.branchId;
+
+//     // Filter inventory items based on the user's branch
+//     const Inventory = await inventory.find({ status: 'approved', branchId: userBranch });
+
+//     res.json(Inventory);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Error retrieving products');
+//   }
+// }const jwt = require('jsonwebtoken');
+//const Inventory = require('../models/inventory'); // Assuming you have a model for inventory
+
 exports.getBrnanchAllApprovedProducts = async (req, res) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1];
-    if (!token) {
-      return res.status(401).send('Authorization token missing');
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).send('Authorization token missing');
+        }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).send('Authorization token missing');
+        }
+
+        const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+        if (!decodedToken || !decodedToken.branchId) {
+            return res.status(401).send('Invalid token');
+        }
+
+        const userBranch = decodedToken.branchId;
+
+        // Filter inventory items based on the user's branch
+        const inventoryItems = await inventory.find({ status: 'approved', locationId: userBranch })
+        .populate("productId");
+        //const inventoryItems = await inventory.find()
+
+        res.json(inventoryItems);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error retrieving products');
     }
+};
 
-    const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
-    if (!decodedToken || !decodedToken.branchId) {
-      return res.status(401).send('Invalid token');
-    }
 
-    const userBranch = decodedToken.branchId;
 
-    // Filter inventory items based on the user's branch
-    const Inventory = await inventory.find({ status: 'approved', branchId: userBranch });
 
-    res.json(Inventory);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error retrieving products');
-  }
-}
+
+
+
+
+
+
+
+
+
+
 
 // Get all products by id --POST
 exports.getProductsById =  (req, res) => {
