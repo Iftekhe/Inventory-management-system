@@ -1,103 +1,160 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import api from '../../api/api';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const UpdateUser = () => {
-    const { id } = useParams(); // Use useParams to get the userId from the URL
-    const [formData, setFormData] = useState({
-        username: '',
-       // password: '',
-        role: '',
-        isApproved: false,
-        department: '',
-        fullName: '',
-        email: '',
-        phoneNumber: '',
-        address: '',
-        branchId: '',
-    });
-    const [profileImage, setProfileImage] = useState(null);
-    const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [users, setUsers] = useState([]);
+  const [locations, setLocations] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentUserBranch, setCurrentUserBranch] = useState(null); // Store current user's branch
+  const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await api.get(`/api/users/${id}`); // Adjust the endpoint according to your backend
-                const userData = response.data;
-                setFormData({
-                    username: userData.username,
-                    //role: userData.role,
-                    isApproved: userData.isApproved,
-                    department: userData.department,
-                    fullName: userData.fullName,
-                    email: userData.email,
-                    phoneNumber: userData.phoneNumber,
-                    address: userData.address,
-                    branchId: userData.branchId,
-                });
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching user:', error);
-                setLoading(false);
-            }
-        };
-        
-        fetchUser();
-    }, [id]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleFileChange = (e) => {
-        setProfileImage(e.target.files[0]);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const data = new FormData();
-        for (const key in formData) {
-            data.append(key, formData[key]);
-        }
-        data.append('profileImage', profileImage);
-
-        try {
-            const response = await api.put(`/api/registerUpdateUser/${id}`, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            setMessage(response.data.msg);
-        } catch (error) {
-            setMessage(error.response?.data?.msg || 'Error updating user');
-        }
-    };
-
-    if (loading) {
-        return <p>Loading user data...</p>;
+  const decodeToken = (token) => {
+    try {
+      // Decode the token to get user information
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return {};
     }
+  };
 
-    return (
-        <div>
-            <h2>Update User</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="username" value={formData.username} onChange={handleChange} required />
-                <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-                <input type="text" name="role" value={formData.role} onChange={handleChange} required />
-                <input type="text" name="department" value={formData.department} onChange={handleChange} />
-                <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required />
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
-                <input type="text" name="address" value={formData.address} onChange={handleChange} />
-                <input type="text" name="branchId" value={formData.branchId} onChange={handleChange} />
-                <input type="file" name="profileImage" onChange={handleFileChange} />
-                <button type="submit">Update</button>
-            </form>
-            {message && <p>{message}</p>}
+  useEffect(() => {
+    const fetchUsersAndLocations = async () => {
+      try {
+        const [usersResponse, locationsResponse] = await Promise.all([
+          api.get('/api/pendingUser'),
+          api.get('/api/allLocation'),
+        ]);
+  
+        setUsers(usersResponse.data);
+        console.log("user:", usersResponse.data  )
+  
+        if (Array.isArray(locationsResponse.data)) {
+            const locationsMap = {};
+            locationsResponse.data.forEach(location => {
+              locationsMap[location.name] = location; // Use location name as key
+            });
+            setLocations(locationsMap);
+          } else {
+            throw new Error('Invalid locations data format');
+          }
+  
+        const existingToken = localStorage.getItem('token');
+        if (existingToken) {
+          // Decode the token to get user information
+          const decodedToken = decodeToken(existingToken);
+          // Log the decoded token to verify
+          console.log(decodedToken);
+          
+          // Set the current user's branch from the decoded token
+          setCurrentUserBranch(decodedToken.branch);
+        } else {
+          console.warn('No user token found. Branch filtering disabled.');
+        }
+      } catch (err) {
+        setError('Error fetching data');
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchUsersAndLocations();
+  }, []);
+  
+  // Filter users by branch
+  const filteredUsers = users
+  // Filter users by search term
+  const filteredUsersBySearch = filteredUsers.filter(user =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  if (loading) {
+    return <div className="alert alert-info">Loading users...</div>;
+  }
+
+  if (error) {
+    return <div className="alert alert-danger">{error}</div>;
+  }
+
+  return (
+    <>
+
+    <div className="container mt-5">
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h2 className="card-title mb-4">Pending Users List</h2>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by username, full name, or email"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Department</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Branch</th>
+                <th>Gender</th>
+                <th>Profile Image</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsersBySearch.map(user => (
+                <tr key={user._id}>
+                  <td>{user.username}</td>
+                  <td>{user.fullName}</td>
+                  <td>{user.email}</td>
+                  <td>{user.designation}</td>
+                  <td>{user.isApproved ? 'Yes' : 'No'}</td>
+                  <td>{user.department}</td>
+                  <td>{user.phoneNumber}</td>
+                  <td>{user.address}</td>
+                 
+                  <td>{user.branchId && locations[user.branchId.name] ? locations[user.branchId.name].name : 'Unknown'}</td>
+                  <td>{user.gender}</td>
+                  <td>
+                    <img
+                      src={`http://localhost:5000/profileImage/${user.profileImage}`}
+                      alt={user.username}
+                      width="50"
+                      className="img-thumbnail"
+                    />
+                  </td>
+                  <td>
+                    <Link to={`/users/editUser/${user._id}`} className="btn btn-primary btn-sm">
+                      Update
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-    );
+      </div>
+    </div>
+    </>
+  );
 };
 
 export default UpdateUser;

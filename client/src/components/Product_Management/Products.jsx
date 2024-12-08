@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
-import HeadAdminMenu from '../Menu/HeadAdminMenu';
-import Menu from '../Menu/AllMenu';
+
+
+
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -48,7 +49,7 @@ const Products = () => {
 
     return (
         <div>
-            <Menu />
+
             <div className="container mt-5">
                 <h2 className="mb-4">Products</h2>
                 <input

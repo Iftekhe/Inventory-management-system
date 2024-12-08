@@ -1,12 +1,12 @@
 // AdminDashboard.jsx
 import React from 'react';
-import AdminMenu from '../Menu/AdminMenu';
+
 import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
     return (
         <div>
-            < AdminMenu />
+
             <div className="container-fluid">
       <div className="row">
         <div className="col-12">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/api';
-import HeadAdminMenu from '../Menu/HeadAdminMenu';
+
+
 const AllBranchLocations = () => {
     const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -35,7 +36,7 @@ const AllBranchLocations = () => {
 
     return (
         <div>
-            <HeadAdminMenu />
+
         
         <div className="container mt-5">
             <h2>All Branch Locations</h2>

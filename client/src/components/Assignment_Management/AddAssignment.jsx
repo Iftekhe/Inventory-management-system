@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from '../../api/api';
-import AdminMenu from "../Menu/AdminMenu";
+
 
 const AddAssignment = () => {
     const [inventoryData, setInventoryData] = useState([]);
@@ -87,17 +87,26 @@ const AddAssignment = () => {
         setFormData({ ...formData, productId: "" });
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (selectedUser) {
-                setFormData((prevFormData) => ({ ...prevFormData, employeeId: selectedUser._id }));
+            // Ensure employeeId is set before submitting
+            const updatedFormData = {
+                ...formData,
+                employeeId: selectedUser?._id || "", // Use selectedUser's ID or fallback to an empty string
+            };
+    
+            if (!updatedFormData.employeeId) {
+                throw new Error("Please select a user before submitting.");
             }
-
-            console.log("Form Data before submission:", formData); // Debug log
-
-            const response = await api.post('/api/addAssignment', formData);
+    
+            console.log("Form Data before submission:", updatedFormData); // Debug log
+    
+            const response = await api.post('/api/addAssignment', updatedFormData);
             console.log(response.data);
+    
+            // Reset the form after successful submission
             setFormData({
                 productId: "",
                 employeeId: "",
@@ -110,10 +119,10 @@ const AddAssignment = () => {
             setSelectedProduct(null);
             setSelectedUser(null);
         } catch (error) {
-            console.error("Error adding assignment", error);
+            console.error("Error adding assignment", error.message || error);
         }
     };
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -141,7 +150,7 @@ const AddAssignment = () => {
 
     return (
         <div>
-            <AdminMenu />
+          
             <div className="container mt-5">
                 <h2>Add Assignment</h2>
                 <form onSubmit={handleSubmit}>
@@ -249,7 +258,7 @@ const AddAssignment = () => {
                                     <td>{selectedUser.department || 'N/A'}</td>
                                     <td>{selectedUser.designation || 'N/A'}</td>
                                     <td>
-                                        <button className="btn btn-warning btn-sm" onClick={() => setSelectedUser(null)}>Deselect</button>
+                                        <button type="button" className="btn btn-warning btn-sm" onClick={() => setSelectedUser(null)}>Deselect</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -271,7 +280,7 @@ const AddAssignment = () => {
                                         <td>{user.department || 'N/A'}</td>
                                         <td>{user.designation || 'N/A'}</td>
                                         <td>
-                                            <button className="btn btn-primary btn-sm" onClick={() => handleSelectUser(user)}>Select</button>
+                                            <button type="button"  className="btn btn-primary btn-sm" onClick={() => handleSelectUser(user)}>Select</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -312,7 +321,10 @@ const AddAssignment = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">Add Assignment</button>
+                    {/* <button type="submit" className="btn btn-primary">Add Assignment</button> */}
+                    <button type="submit" className="btn btn-primary" disabled={!selectedProduct || !selectedUser}>
+    Add Assignment
+</button>
                 </form>
             </div>
         </div>

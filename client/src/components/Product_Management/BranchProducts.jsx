@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link,useNavigate  } from 'react-router-dom';
 import api from '../../api/api';
-import AdminMenu from '../Menu/AdminMenu';
+
+
 const BranchProducts = () => {
     const [products, setProducts] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
@@ -34,7 +35,7 @@ const BranchProducts = () => {
 
     return (
         <div>
-            <AdminMenu />
+
         
         <div className="container mt-5">
             <h2 className="mb-4">Products</h2>

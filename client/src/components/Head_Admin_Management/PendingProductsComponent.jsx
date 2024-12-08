@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AdminMenu from '../Menu/AdminMenu';
-import HeadAdminMenu from '../Menu/HeadAdminMenu';
+
+
+
 const PendingProductsComponent = () => {
     const [pendingProducts, setPendingProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -94,7 +95,7 @@ const PendingProductsComponent = () => {
 
     return (
         <div>
-            <HeadAdminMenu />
+
         
         <div className="container mt-5">
             <h2>Pending Products</h2>

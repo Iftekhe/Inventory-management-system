@@ -21,20 +21,13 @@ const Login = () => {
           const response = await api.post('/api/login', formData);
           localStorage.setItem('token', response.data.token);
           console.log("token data", response.data);
+          console.log("token login", response.data.token);
       
           const department = response.data.department; // Extract department from response data
           console.log(department);
-      
-          if (department === 'Administration' && response.data.branch === 'Head Office') { // Check if department is Administration and branch is head office
-            console.log('Navigating to admin head office');
-            navigate('/Head-Admin-dashboard'); // Redirect to admin head office component
-          } else if (department === 'Administration') { // Check if department is Administration
-            console.log('Navigating to admin dashboard');
-            navigate('/admin-dashboard'); // Redirect to admin dashboard
-          } else {
-            console.log('Navigating to employee dashboard');
-            navigate('/employee-dashboard'); // Redirect to employee dashboard for non-admin users
-          }
+          
+          navigate('/dashboard')
+          window.location.reload();
         } catch (error) {
           setMessage({
             type: 'danger',
@@ -57,6 +50,7 @@ const Login = () => {
                                 name="email"
                                 className="form-control"
                                 placeholder="Email"
+                                // value="putul@gmail.com"
                                 onChange={handleChange}
                                 required
                             />
@@ -69,6 +63,7 @@ const Login = () => {
                                 name="password"
                                 className="form-control"
                                 placeholder="Password"
+                                // value="putul"
                                 onChange={handleChange}
                                 required
                             />

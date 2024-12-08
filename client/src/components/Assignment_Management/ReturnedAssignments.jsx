@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
-import AdminMenu from "../Menu/AdminMenu";
+
 
 const ReturnedAssignments = () => {
   const [returnedAssignments, setReturnedAssignments] = useState([]);
@@ -48,7 +48,7 @@ const ReturnedAssignments = () => {
 
   return (
     <div>
-      <AdminMenu />
+
       <div className="container mt-5">
         <h2>Returned Assignments</h2>
         {error && <div className="alert alert-danger" role="alert">{error}</div>}

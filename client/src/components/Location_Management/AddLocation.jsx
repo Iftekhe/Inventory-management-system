@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../../api/api';
-import HeadAdminMenu from '../Menu/HeadAdminMenu';
+
+
 const AddLocation = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -30,7 +31,7 @@ const AddLocation = () => {
 
     return (
         <div>
-            <HeadAdminMenu />
+
         
         <div className="container mt-5">
             <h2>Add Location</h2>

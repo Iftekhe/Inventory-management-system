@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../../api/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
-const AllUserList = () => {
+const BranchUser = () => {
   const [users, setUsers] = useState([]);
   const [locations, setLocations] = useState({});
   const [loading, setLoading] = useState(true);
@@ -32,7 +30,6 @@ const AllUserList = () => {
         ]);
   
         setUsers(usersResponse.data);
-        console.log("user:", usersResponse.data  )
   
         if (Array.isArray(locationsResponse.data)) {
             const locationsMap = {};
@@ -67,7 +64,8 @@ const AllUserList = () => {
   }, []);
   
   // Filter users by branch
-  const filteredUsers = users
+  const filteredUsers = users.filter(user => user.branchId && user.branchId.name === currentUserBranch);
+
   // Filter users by search term
   const filteredUsersBySearch = filteredUsers.filter(user =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,7 +86,9 @@ const AllUserList = () => {
   }
 
   return (
-    <>
+    <div>
+
+    
 
     <div className="container mt-5">
       <div className="card shadow-sm">
@@ -115,7 +115,6 @@ const AllUserList = () => {
                 <th>Phone Number</th>
                 <th>Address</th>
                 <th>Branch</th>
-                <th>Gender</th>
                 <th>Profile Image</th>
                 <th>Actions</th>
               </tr>
@@ -126,14 +125,12 @@ const AllUserList = () => {
                   <td>{user.username}</td>
                   <td>{user.fullName}</td>
                   <td>{user.email}</td>
-                  <td>{user.designation}</td>
+                  <td>{user.role}</td>
                   <td>{user.isApproved ? 'Yes' : 'No'}</td>
                   <td>{user.department}</td>
                   <td>{user.phoneNumber}</td>
                   <td>{user.address}</td>
-                 
                   <td>{user.branchId && locations[user.branchId.name] ? locations[user.branchId.name].name : 'Unknown'}</td>
-                  <td>{user.gender}</td>
                   <td>
                     <img
                       src={`http://localhost:5000/profileImage/${user.profileImage}`}
@@ -154,8 +151,8 @@ const AllUserList = () => {
         </div>
       </div>
     </div>
-    </>
+    </div>
   );
 };
 
-export default AllUserList;
+export default BranchUser;

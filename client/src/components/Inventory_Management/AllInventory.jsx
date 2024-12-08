@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/api';
 import { useNavigate } from 'react-router-dom';
-import HeadAdminMenu from '../Menu/HeadAdminMenu';
+
+
 const AllInventory = () => {
     const [inventoryItems, setInventoryItems] = useState([]);
     const [error, setError] = useState(null);
@@ -47,7 +48,7 @@ const AllInventory = () => {
 
     return (
         <div>
-            <HeadAdminMenu />
+
             <div className="container mt-5">
                 <h1>Inventory Items</h1>
                 {error ? (

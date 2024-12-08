@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from '../../api/api';
-import HeadAdminMenu from "../Menu/HeadAdminMenu";
+
 
 const HeadAdminViewAssignment = () => {
   const [assignments, setAssignments] = useState([]);
@@ -28,7 +28,7 @@ const HeadAdminViewAssignment = () => {
 
   return (
     <div>
-      <HeadAdminMenu />
+     
       <div className="container mt-5">
         <h2>Assignment Records</h2>
         {assignments.length > 0 ? (

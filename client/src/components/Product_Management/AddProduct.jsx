@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AdminMenu from '../Menu/AdminMenu';
+
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({
@@ -146,7 +146,7 @@ const AddProduct = () => {
       });
       setMessage(response.data.message);
       if (window.confirm('Product added successfully! Proceed to product list?')) {
-        navigate('/products');
+        navigate('/products/products');
       }
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error adding product');
@@ -155,7 +155,7 @@ const AddProduct = () => {
   
   return (
     <div>
-      <AdminMenu />
+
     
     <div className="container mt-5">
       <h2>Add Product</h2>

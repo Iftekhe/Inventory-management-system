@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from '../../api/api';
-import AdminMenu from "../Menu/AdminMenu";
+
 
 const ViewAssignments = () => {
   const [assignments, setAssignments] = useState([]);
@@ -9,12 +9,17 @@ const ViewAssignments = () => {
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        const response = await api.get("/api/getAllAssignment");
+        const response = await api.get("/api/getBranchAllAssignment", {
+          headers: {
+            Authorization: `${localStorage.getItem('token')}`, 
+          }
+        });
+        
         console.log("Fetched Assignments Data:", response.data);
         setAssignments(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching assignments", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -28,7 +33,7 @@ const ViewAssignments = () => {
 
   return (
     <div>
-      <AdminMenu />
+
       <div className="container mt-5">
         <h2>Assignment Records</h2>
         {assignments.length > 0 ? (

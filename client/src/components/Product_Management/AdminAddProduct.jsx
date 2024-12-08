@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import HeadAdminMenu from '../Menu/HeadAdminMenu';
+
 
 const AdminAddProduct = () => {
   const [formData, setFormData] = useState({
@@ -146,7 +146,7 @@ const AdminAddProduct = () => {
 
   return (
     <div>
-      <HeadAdminMenu />
+
     
     <div className="container mt-5">
       <h2>Add Product</h2>

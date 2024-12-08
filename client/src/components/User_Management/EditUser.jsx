@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams , useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AdminMenu from '../Menu/AdminMenu';
+// import AdminMenu from '../Menu/AdminMenu';
+
 
 const EditUser = () => {
     const { id } = useParams();
@@ -97,7 +98,7 @@ const EditUser = () => {
                     },
                 });
                 setMessage(response.data.msg);
-                navigate('/All-user-list');
+                navigate('/users/All-user-list');
             }
         } catch (error) {
             setMessage(error.response?.data?.message || 'Error updating user');
@@ -111,12 +112,12 @@ const EditUser = () => {
 
     return (
         <div>
-<AdminMenu />
+
         
         <div className="container mt-5">
             <div className="card">
                 <div className="card-header">
-                    <h2 className="mb-0">Edit User</h2>
+                    <h2 className="mb-0">Update User</h2>
                 </div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>

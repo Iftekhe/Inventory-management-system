@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from '../../api/api';
-import HeadAdminMenu from "../Menu/HeadAdminMenu";
+
+
+
 
 const HeadAdminAddAssignment = () => {
     const [inventoryData, setInventoryData] = useState([]);
@@ -141,7 +143,7 @@ const HeadAdminAddAssignment = () => {
 
     return (
         <div>
-            <HeadAdminMenu />
+
             <div className="container mt-5">
                 <h2>Add Assignment</h2>
                 <form onSubmit={handleSubmit}>

@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import api from '../../api/api';
-import AdminMenu from '../Menu/AdminMenu';
+
+
 
 const AddInventory = () => {
     const [formData, setFormData] = useState({
@@ -75,7 +76,9 @@ const AddInventory = () => {
             }));
         } else {
             console.error('Token not found in localStorage');
-        }})
+        }
+    }, []); // Add an empty dependency array
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -159,12 +162,15 @@ const AddInventory = () => {
         }
 
         try {
-            const response = await api.post('/api/addInventory',  formData,{
-                // headers: {
-                //   'Content-Type': 'multipart/form-data',
-                // },
-              }); 
-            setMessage('Inventory added successfully');
+            if (window.confirm('Request product to inventory')){
+                const response = await api.post('/api/addInventory',  formData,{
+                    // headers: {
+                    //   'Content-Type': 'multipart/form-data',
+                    // },
+                  }); 
+                setMessage('Inventory added successfully');
+            }
+            
         } catch (error) {
             setMessage(error.response?.data || 'Error adding inventory');
         }
@@ -174,11 +180,14 @@ const AddInventory = () => {
         <div>
 
         
-        <AdminMenu/>
+
         <div className="container mt-5">
             <h2>Add Inventory</h2>
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
+                
+                {!selectedProduct && (
+                    <div>
+<div className="form-group">
                     <label htmlFor="productSearch">Search Product</label>
                     <input
                         className="form-control"
@@ -189,7 +198,7 @@ const AddInventory = () => {
                         placeholder="Search by name, product code or subcategory"
                     />
                 </div>
-                {!selectedProduct && (
+                    
                     <table className="table table-striped table-bordered">
                         <thead className="thead-dark">
                             <tr>
@@ -224,6 +233,7 @@ const AddInventory = () => {
                             ))}
                         </tbody>
                     </table>
+                    </div>
                 )}
                 {selectedProduct && (
                     <>
@@ -267,7 +277,7 @@ const AddInventory = () => {
                                 type="number"
                                 id="quantity"
                                 name="quantity"
-                                value={formData.quantity}
+                                value= '1'
                                 onChange={handleChange}
                                 min="1" // Minimum quantity of 1
                                 max="1" // Maximum quantity of 1

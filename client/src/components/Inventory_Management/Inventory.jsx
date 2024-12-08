@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/api';
 import { useNavigate } from 'react-router-dom';
-import AdminMenu from '../Menu/AdminMenu';
+
+
 
 const Inventory = () => {
     const [inventoryItems, setInventoryItems] = useState([]);
@@ -48,7 +49,7 @@ const Inventory = () => {
 
     return (
         <div>
-            <AdminMenu />
+
             <div className="container mt-5">
                 <h1>Inventory Items</h1>
                 {error ? (
