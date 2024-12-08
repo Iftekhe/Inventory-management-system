@@ -45,7 +45,7 @@ app.use('/api/', authRouter)
 
 //transaction route
 //app.use('/api/transac', transactionRouter)
-//app.use('/api/transaction', transactionRouter)
+//app.use('/api/transaction', transactionRouter) //pre auth / emi er jonno creadit carf hoy
 
 //location router
 app.use('/api/', locationRouter)

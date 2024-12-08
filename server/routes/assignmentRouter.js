@@ -16,26 +16,26 @@ assignmnetRouter.post("/requestAssignment",  assignmentController.requestAssignm
 
 assignmnetRouter.get("/getAllAssignment",  assignmentController.getAssignments);
 
-assignmnetRouter.get("/assignments/:userId", assignmentController.getUserAssignments);
+assignmnetRouter.get("/getAllAssignmentById/:AssignmentId",  assignmentController.getAllAssignmentById);
 
-assignmnetRouter.put("/assignments/return/:assignmentId", assignmentController.returnAssignment);
+assignmnetRouter.get("/getReturnedAssignmentByBranch",  assignmentController.getReturnedAssignmentByBranch);
 
+assignmnetRouter.get("/getAllReturnedAssignment",  assignmentController.getAllReturnedAssignment);
 
-assignmnetRouter.get("/returnedAssignments",  assignmentController.getReturnedAssignments);
+assignmnetRouter.get("/getPendingAssignment",  assignmentController.getPendingAssignments);
 
+assignmnetRouter.put("/ApprovePendingAssignment/:AssignmentId",  assignmentController.ApprovePendingAssignments);
 
+assignmnetRouter.get("/getBranchAllAssignment",  assignmentController.getBranchAssignments);
+
+assignmnetRouter.get("/getEmpAllAssignment",  assignmentController.getEmpAllAssignment);
+
+assignmnetRouter.post("/returnedAssignments/:assignmentId",  assignmentController.postReturnedAssignments);
 
 assignmnetRouter.get("/admin/productRequests", assignmentController.getProductRequests);
 
-
-assignmnetRouter.post("/employee/requestProduct",   assignmentController.requestProduct);
-
-
 assignmnetRouter.put("/admin/approveRequest/:assignmentId",  assignmentController.approveRequest);
 
-
 assignmnetRouter.post("/admin/rejectRequest/:requestId",  assignmentController.rejectRequest);
-
-
 
 module.exports = assignmnetRouter;

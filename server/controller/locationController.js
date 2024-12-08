@@ -78,6 +78,7 @@ exports.countLocation = async (req, res) => {
 
 exports.getAllUserOfLocation = async (req, res) => {
   try {
+    console.log("locationbyID")
     const locationId = req.params.locationId;
 
     // Validate the locationId
@@ -96,6 +97,7 @@ exports.getAllUserOfLocation = async (req, res) => {
 
     res.json(users)
   } catch (error) {
+    console.log(error)
     res.status(500).send({ error: 'An error occurred while fetching users' });
   }
 };

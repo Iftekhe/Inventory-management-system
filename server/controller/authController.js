@@ -102,13 +102,24 @@ exports.userById =  (req, res) => {
 
 exports.AllUser = async (req, res) => {
   try {
-    const users = await User.find().populate('branchId')
+    const users = await User.find({isApproved: true}).populate('branchId')
      res.json(users) 
   } catch (error) {
     console.error(error);
     res.status(500).send('Error retrieving');
   }
 };
+
+exports.pendingUser = async (req, res) => {
+  try {
+    const users = await User.find({isApproved: false}).populate('branchId')
+     res.json(users) 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving');
+  }
+};
+
 
 
 exports.getUserCount = async (req, res) => {
@@ -121,7 +132,7 @@ exports.getUserCount = async (req, res) => {
 };
 exports.pendingCount = async (req, res) => {
   try {
-    const pendingCount = await User.countDocuments({ status: 'pending' });
+    const pendingCount = await User.countDocuments({ isApproved: false });
     res.json({ count: pendingCount });
 } catch (error) {
     res.status(500).json({ message: error.message });

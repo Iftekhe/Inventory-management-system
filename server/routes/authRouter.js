@@ -54,6 +54,8 @@ Router.get("/count", authController.getUserCount );
 
 Router.get("/pendingCount", authController.pendingCount );
 
+Router.get("/pendingUser", authController.pendingUser );
+
 //Router.get('/countProd', productController.getProductCount);
 
 // update userinfo route - put

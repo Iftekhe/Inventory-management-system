@@ -7,9 +7,9 @@ const transferController = require("../controller/transferController");
 
 const isAdmin = require('../middleware/isAdmin');
 
-transferRouter.post("/addTransfer", isAdmin, transferController.addTransfer);
+transferRouter.post("/addTransfer", transferController.addTransfer);
 
-transferRouter.get("/getTransfers", isAdmin, transferController.getTransfers);
+transferRouter.get("/getEmpTransfers", transferController.getEmpTransfers);
 
 
 module.exports = transferRouter;

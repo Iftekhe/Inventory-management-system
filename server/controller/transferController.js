@@ -1,74 +1,95 @@
-const Transfer = require('../models/transfer.model'); // Adjust the path as needed
+const Assignment = require('../models/assignment.model'); 
+const Inventory = require('../models/inventory.model'); 
 
 exports.addTransfer = async (req, res) => {
   try {
-    const {
-      productId,
-      fromUserId,
-      toUserId,
-      fromBranchId,
-      toBranchId,
-      transferDate,
-      requestedBy,
-      approvedBy,
-      approvalDate,
-      status
-    } = req.body;
+    console.log("add transfer")
+  const{ User,assignment } = req.body;
+  console.log("User", User)
+  console.log("assignment", assignment)
 
-    // Validate the request body
-    if (!productId || !fromUserId || !fromBranchId || !transferDate || !status) {
-      return res.status(400).send("Required fields are missing: productId, fromUserId, fromBranchId, transferDate, status");
-    }
+  const employeeId = User._id
+  const assignmentId = assignment._id
+  const assignedDate = assignment.assignedDate
+  const branchId = assignment.branchId
+  const currentStatus = "assigned"
+  const productId = assignment.productId
+  const quantity = assignment.quantity
+  const returnedDate = assignment.returnedDate
 
-    // Validate status value
-    const validStatuses = ["pending", "approved", "rejected"];
-    if (!validStatuses.includes(status)) {
-      return res.status(400).send("Invalid status value");
-    }
+  console.log("userIddddd", employeeId)
+  console.log("assignmentIdddddddddd", assignmentId)
+  const asssgnmntID = await Assignment.findById(assignmentId)
+  asssgnmntID.currentStatus = "returned"
+  await asssgnmntID.save()
+  const newAssignment = new Assignment({
+    employeeId,
+    assignedDate,
+    branchId,
+    currentStatus,
+    productId,
+    quantity,
+    returnedDate,
+  });
 
-    // Create a new transfer record
-    const newTransfer = new Transfer({
-      productId,
-      fromUserId,
-      toUserId,
-      fromBranchId,
-      toBranchId,
-      transferDate,
-      requestedBy,
-      approvedBy,
-      approvalDate,
-      status 
-    });
+  // Save the new assignment record to the database
+  await newAssignment.save();
 
-    // Save the new transfer record to the database
-    await newTransfer.save();
 
-    // Send a success response
-    res.status(201).send("Transfer record added successfully");
+
+
   } catch (error) {
-    // Handle errors
-    res.status(500).send(error.message);
+    console.error(error)
+  }
+  
+
+
+
+
+};
+
+const decodeToken = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return {};
   }
 };
 
+exports.getEmpTransfers = async (req, res) => {
 
-
-exports.getTransfers = async (req, res) => {
   try {
-    // Query transfer records from the database and populate all referenced fields
-    const transfers = await Transfer.find()
-      .populate('productId')
-      .populate('fromUserId')
-      .populate('toUserId')
-      .populate('fromBranchId')
-      .populate('toBranchId')
-      .populate('requestedBy')
-      .populate('approvedBy');
+    const existingToken = req.headers.authorization?.split(" ")[1]; // Get the token part after "Bearer"
+    console.log("getpendingHandover222", existingToken)
+    if (!existingToken) {
+      return res.status(401).json({ message: "Authorization token is required" });
+    }
 
-    // Send the transfer records as a response
-    res.json(transfers);
+    const decodedToken = decodeToken(existingToken);
+    console.log("getpendingHandover3333", decodedToken)
+    const userId = decodedToken.id;
+    
+    console.log("getpendingHandover4444", userId)
+
+    // Query assignment records from the database for the specific branch
+    // const assignments = await Assignment.find({ employeeId : userId && currentStatus == "pending_handover" }
+
+    const assignments = await Assignment.find({
+      employeeId: userId,
+      currentStatus: "pending_handover"
+  })
+  
+      .populate('productId')
+      .populate('employeeId')
+      .populate('branchId');
+
+    // Send the assignment records as a response
+    res.json(assignments);
   } catch (error) {
     // Handle errors
     res.status(500).send(error.message);
+    console.error(error)
   }
+  
 };
