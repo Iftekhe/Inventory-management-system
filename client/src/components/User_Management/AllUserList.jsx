@@ -30,6 +30,7 @@ const AllUserList = () => {
         ]);
   
         setUsers(usersResponse.data);
+        console.log("user:", usersResponse.data  )
   
         if (Array.isArray(locationsResponse.data)) {
             const locationsMap = {};

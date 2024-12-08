@@ -88,6 +88,7 @@ const AdminMenu = () => {
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><Link className="dropdown-item" to="/Add-Assignment">Add Assignment</Link></li>
                 <li><Link className="dropdown-item" to="/View-Assignments">View Assignments</Link></li>
+                <li><Link className="dropdown-item" to="/Return-Assignments">Return Assignments</Link></li>
               </ul>
             </li>
           </ul>
@@ -97,7 +98,9 @@ const AdminMenu = () => {
               {user.username}
               </a>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
-                <li><Link className="dropdown-item" to="/user-list">User List</Link></li>
+                <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
+                <li><Link className="dropdown-item" to="/assignments">My Assignments</Link></li>
+
                 <li><Logout /></li>
               </ul>
             </li>

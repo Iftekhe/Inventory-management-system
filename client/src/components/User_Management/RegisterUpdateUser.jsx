@@ -6,7 +6,7 @@ const UpdateUser = () => {
     const { id } = useParams(); // Use useParams to get the userId from the URL
     const [formData, setFormData] = useState({
         username: '',
-        password: '',
+       // password: '',
         role: '',
         isApproved: false,
         department: '',
@@ -27,7 +27,7 @@ const UpdateUser = () => {
                 const userData = response.data;
                 setFormData({
                     username: userData.username,
-                    role: userData.role,
+                    //role: userData.role,
                     isApproved: userData.isApproved,
                     department: userData.department,
                     fullName: userData.fullName,
@@ -42,7 +42,7 @@ const UpdateUser = () => {
                 setLoading(false);
             }
         };
-
+        
         fetchUser();
     }, [id]);
 

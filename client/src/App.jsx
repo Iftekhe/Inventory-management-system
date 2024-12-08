@@ -5,10 +5,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 import RegisterPage from './components/User_Management/Register'
-import LoginPage from './components/User_Management/Login';
-import AddProductPage from './components/Product_Management/AddProduct';
 
+
+import LoginPage from './components/User_Management/Login';
+
+
+import AddProductPage from './components/Product_Management/AddProduct';
 import AdminAddProductPage from './components/Product_Management/AdminAddProduct';
+
 
 import ProductsPagee from './components/Product_Management/Products';
 import BranchProductPage from './components/Product_Management/AvailableProduct';
@@ -24,7 +28,9 @@ import InventoryPage from './components/Inventory_Management/Inventory'
 import AddInventoryPage from './components/Inventory_Management/AddInventory'
 import AddLocationPage from './components/Location_Management/AddLocation';
 import AllBranchLocationsPage from './components/Location_Management/AllBranchLocations';
-import AddAssignmentPage from './components/Assignment_Management/AddAssignment';
+import AddAssignmentPage from './components/Assignment_Management/AddAssignment'; 
+import HeadAdminAddAssignmentPage from './components/Assignment_Management/HeadAdminAddAssignment';  
+import HeadAdminViewAssignmentPage from './components/Assignment_Management/HeadAdminViewAssignment';  
 import ViewAssignmentsPage from './components/Assignment_Management/ViewAssignments';
 import AddTransferPage from './components/Transfer_Management/AddTransfer';
 import PrivateRoute from './components/Auth/PrivateRoute';
@@ -54,6 +60,16 @@ import BranchProducts from './components/Product_Management/BranchProducts';
 import AllUserListPage from './components/User_Management/AllUserList';
 
 import AllInventoryPage from './components/Inventory_Management/AllInventory';
+
+import ProfilePage from './components/Menu/Profile';
+
+import UserAssignments from './components/Assignment_Management/UserAssignments';
+
+import EmpAssignments from './components/Assignment_Management/EmpAssignments';
+
+import ReturnedAssignments from './components/Assignment_Management/ReturnedAssignments';
+
+
 function App() {
     const token = localStorage.getItem('token');
     const userRole = token ? JSON.parse(atob(token.split('.')[1])).department : null;
@@ -89,6 +105,15 @@ function App() {
             <Navigate to="/login" />
           )
         } />} />
+
+<Route path="/profile"  element={<PrivateRoute element={<ProfilePage />} />}  />
+
+<Route path="/assignments" element={<PrivateRoute element={<UserAssignments />} />} />
+<Route path="/user-assignments" element={<PrivateRoute element={<EmpAssignments />} />} />
+
+
+
+<Route path="/Return-Assignments" element={<PrivateRoute element={<ReturnedAssignments />} />} />
 
 
           <Route path="/admin-dashboard" element={<PrivateRoute element={<AdminDashboard />} />} />
@@ -127,6 +152,8 @@ function App() {
         <Route path="/Add-Location" element={<PrivateRoute element={<AddLocationPage />} allowedRoles={['Administration']} />} />
         <Route path="/All-Location" element={<PrivateRoute element={<AllBranchLocationsPage />} />} />
         <Route path="/Add-Assignment" element={<PrivateRoute element={<AddAssignmentPage />} allowedRoles={['Administration']} />} />
+        <Route path="/head-adim-Add-Assignment" element={<PrivateRoute element={<HeadAdminAddAssignmentPage />} allowedRoles={['Administration']} />} />
+        <Route path="/head-admin-View-Assignments" element={<PrivateRoute element={<HeadAdminViewAssignmentPage />} allowedRoles={['Administration']} />} /> 
         <Route path="/View-Assignments" element={<PrivateRoute element={<ViewAssignmentsPage />} />} />
         <Route path="/Add-Transfer" element={<PrivateRoute element={<AddTransferPage />} allowedRoles={['Administration']} />} />
        

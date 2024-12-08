@@ -111,8 +111,8 @@ const HeadAdminMenu = () => {
                 Assignments
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><Link className="dropdown-item" to="/Add-Assignment">Add Assignment</Link></li>
-                <li><Link className="dropdown-item" to="/View-Assignments">View Assignments</Link></li>
+                <li><Link className="dropdown-item" to="/head-adim-Add-Assignment">Add Assignment</Link></li>
+                <li><Link className="dropdown-item" to="/head-admin-View-Assignments">View Assignments</Link></li>
               </ul>
             </li>
           </ul>
@@ -122,7 +122,7 @@ const HeadAdminMenu = () => {
               {user.username}
               </a>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
-                <li><Link className="dropdown-item" to="/user-list">User List</Link></li>
+              <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
                 <li><Logout /></li>
               </ul>
             </li>

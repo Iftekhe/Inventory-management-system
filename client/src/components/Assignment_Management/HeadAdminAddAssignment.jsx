@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from '../../api/api';
-import AdminMenu from "../Menu/AdminMenu";
+import HeadAdminMenu from "../Menu/HeadAdminMenu";
 
-const AddAssignment = () => {
+const HeadAdminAddAssignment = () => {
     const [inventoryData, setInventoryData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -141,7 +141,7 @@ const AddAssignment = () => {
 
     return (
         <div>
-            <AdminMenu />
+            <HeadAdminMenu />
             <div className="container mt-5">
                 <h2>Add Assignment</h2>
                 <form onSubmit={handleSubmit}>
@@ -319,4 +319,4 @@ const AddAssignment = () => {
     );
 };
 
-export default AddAssignment;
+export default HeadAdminAddAssignment;
